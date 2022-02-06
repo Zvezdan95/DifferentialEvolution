@@ -26,13 +26,12 @@
             const F        = 0.5;
             // define crossover rate for recombination
             const cr       = 0.7;
-            const solution = DifferentialEvolution(pop_size, bounds, iter, F, cr);
-            console.log(`Solution: f([${solution.best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${solution.best_obj.toFixed(5)}`);
-
+            const solution = DifferentialEvolution(pop_size, bounds, iter, F, cr, true);
+            console.log(solution);
         }
 
         $(document).ready(function () {
-            test();
+            // test();
             $('#vec_size').on('keyup change', function(){
                 let vec_size    = parseInt($(this).val());
                 let boundS_html = '';

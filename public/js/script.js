@@ -100,7 +100,7 @@ function Crossover(mutated, target, dimensions, criteria) {
     return trial;
 }
 
-function DifferentialEvolution(pop_size, bounds, iterations, factor, criteria) {
+function DifferentialEvolution(pop_size, bounds, iterations, factor, criteria, test = false) {
     console.log({
         pop_size : pop_size,
         bounds : bounds,
@@ -144,18 +144,24 @@ function DifferentialEvolution(pop_size, bounds, iterations, factor, criteria) {
             }
         });
         best_obj = Math.min.apply(null, obj_all);
+
         if (best_obj < prev_obj) {
             best_vector = population[obj_all.indexOf(best_obj)];
             prev_obj    = best_obj
         }
         //report progress at each iteration
-        // print('Iteration: %d f([%s]) = %.5f' % (i, around(best_vector, decimals=5), best_obj))
-        messages.push(`Iteration: ${i + 1} f([${best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${best_obj.toFixed(5)}`)
-        console.log(`Iteration: ${i + 1} f([${best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${best_obj.toFixed(5)}`);
+        messages.push(`Iteration: ${i + 1} f([${best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${best_obj.toFixed(5)}`);
+        if(test){
+            console.log(`Iteration: ${i + 1} f([${best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${best_obj.toFixed(5)}`);
+        }
     }
-    console.log(messages)
+
     messages.push(`Solution: f([${best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${best_obj.toFixed(5)}`);
-    console.log(messages)
+
+    if(test){
+        console.log(`Solution: f([${best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${best_obj.toFixed(5)}`)
+    }
+
     return {
         messages : messages,
         best_vector : best_vector,
