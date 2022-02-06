@@ -168,28 +168,3 @@ function DifferentialEvolution(pop_size, bounds, iterations, factor, criteria, t
         best_obj : best_obj
     };
 }
-
-/*
- for (let j = 0; j < pop_size; j++) {
- //refresh the temp population to not throw out all the element out of the population with splice
- let temp_population = population;
- //choose 3 random individuals from the population that are not the current one
- const candidates    = ChooseRandom(temp_population.splice(j, 1), 3);
- //perform mutation
- let mutated         = Mutate(candidates, factor);
- //check that lower and upper bounds are retained after mutation
- mutated             = CheckBounds(candidates, factor);
- //perform crossover
- let trail           = Crossover(mutated, population[j], bounds.length, criteria);
- //compute objective function value for target vector
- let obj_target      = ObjectiveFunction(population[j]);
- //compute objective function value for trial vector
- let obj_trial       = ObjectiveFunction(trail);
- //perform selection
- if (obj_trial < obj_target) {
- population[j] = trail;
- obj_all[j]    = obj_trial;
- //report progress at each iteration
- // print('Iteration: %d f([%s]) = %.5f' % (i, around(best_vector, decimals=5), best_obj))
- }
- }*/
