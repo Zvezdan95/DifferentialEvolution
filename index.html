@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>differential evolution</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        //test
+        function test() {
+            const pop_size = 10;
+            // define lower and upper bounds for every dimension
+            const bounds   = [
+                {
+                    min: -5.0,
+                    max: 5.0
+                },
+                {
+                    min: -5.0,
+                    max: 5.0
+                }];
+            // define number of iterations
+            const iter     = 100;
+            // define scale factor for mutation
+            const F        = 0.5;
+            // define crossover rate for recombination
+            const cr       = 0.7;
+            const solution = DifferentialEvolution(pop_size, bounds, iter, F, cr);
+            console.log(`Solution: f([${solution.best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${solution.best_obj.toFixed(5)}`);
+
+        }
+
+        $(document).ready(function () {
+            test();
+            $('#vec_size').on('keyup change', function(){
+                let vec_size    = parseInt($(this).val());
+                let boundS_html = '';
+                // const bounds_el = $('#bounds');
+
+                while (vec_size){
+                    boundS_html += ' <div class="bounds">';
+                        boundS_html += '<label>min</label>';
+                        boundS_html += '<input type="text" class="min" value="-5">';
+                        boundS_html += '<label>max</label>';
+                        boundS_html += '<input type="text" class="max" value="5">';
+                    boundS_html += ' </div>';
+                    vec_size--;
+                }
+
+                $('#bounds').empty().append(boundS_html);
+                // console.log('vec up!', $(this).val())
+            });
+
+            $('#vec_size').trigger('change');
+
+            $('#evolve').click(() => {
+                const input = {
+                    pop_size  : parseFloat($('#pop_size').val().trim()),
+                    bounds    : [],
+                    iterations: parseFloat($('#iterations').val().trim()),
+                    factor    : parseFloat($('#factor').val().trim()),
+                    criteria  : parseFloat($('#criteria').val().trim()),
+                };
+
+                $('.bounds').each(function (){
+                    input.bounds.push({
+                        min : parseFloat($(this).find('.min').val()),
+                        max : parseFloat($(this).find('.max').val())
+                    });
+                });
+
+                const evo_result = DifferentialEvolution(input.pop_size, input.bounds, input.iterations,input.factor, input.criteria);
+                const msg_html   = evo_result.messages.map(item => '<div class="row">' + item + '</div>').join('');
+                $('#result').empty().append(msg_html);
+                // console.log(input)
+            });
+
+        });
+    </script>
+    <style>
+        input[type=text], input[type=number],select {
+            width: 100%;
+            padding: 8px 8px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .row{
+            float: left;
+            width: 50%;
+            margin-left: 25%;
+        }
+        .container{
+            width: 100%;
+            height: 100%;
+        }
+        #bounds{
+            padding-bottom: 8px;
+        }
+        .bounds{
+            width: 50%;
+            border: 1px grey solid;
+            padding: 5px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 8px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <label for="pop_size">Population Size</label>
+        <input type="text" id="pop_size" required value="10">
+    </div>
+    <div class="row">
+        <label for="vec_size">Vector Size</label>
+        <input type="number" id="vec_size" min="1" required pattern="\d" value="2">
+    </div>
+    <label class="row" for="bounds">Bounds</label>
+    <div id="bounds" class="row">
+<!--        <div class="bounds">-->
+<!--            <label>min</label>-->
+<!--            <input type="text" class="min">-->
+<!--            <label>max</label>-->
+<!--            <input type="text" class="max">-->
+<!--        </div>-->
+    </div>
+    <div class="row">
+        <label for="iterations">Iterations</label>
+        <input type="text" id="iterations" required value="100">
+    </div>
+    <div class="row">
+        <label for="factor">Factor</label>
+        <input type="text" id="factor" required value="0.5">
+    </div>
+    <div class="row">
+        <label for="criteria">Criteria</label>
+        <input type="text" id="criteria" required value="0.7">
+    </div>
+    <div class="row">
+        <button id="evolve" type="button">Evolve</button>
+    </div>
+</div>
+<div id="result"></div>
+</body>
+</html>
