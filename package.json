@@ -1,0 +1,28 @@
+{
+  "name": "differential-evolution",
+  "version": "1.0.0",
+  "description": " differential evolution in js",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zvezdan95/DifferentialEvolution.git"
+  },
+  "keywords": [
+    "differential",
+    "evolution",
+    "evolution",
+    "algorithm"
+  ],
+  "author": "Zvezdan Nedimovic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Zvezdan95/DifferentialEvolution/issues"
+  },
+  "homepage": "https://github.com/Zvezdan95/DifferentialEvolution#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
