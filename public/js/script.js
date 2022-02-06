@@ -167,7 +167,6 @@ function DifferentialEvolution(pop_size, bounds, iterations, factor, criteria, t
         best_vector : best_vector,
         best_obj : best_obj
     };
-    // [best_vector, best_obj];
 }
 
 /*
