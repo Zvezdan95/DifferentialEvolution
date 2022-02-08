@@ -68,11 +68,17 @@ function Mutate(x, factor) {
 
 //boundary check operation
 function CheckBounds(mutated, bounds) {
-    return mutated.map(function (element) {
-        if (element < bounds.min) {
-            return bounds.min;
-        } else if (element < bounds.max) {
-            return bounds.max;
+    // console.log('mutated!!', mutated)
+    return mutated.map(function (element, index) {
+        // console.log('bounds', bounds);
+        // console.log( bounds.min);
+        // console.log( bounds.max);
+        // console.log(element );
+        // console.log(element < bounds.min);
+        if (element < bounds[index].min) {
+            return bounds[index].min;
+        } else if (element > bounds[index].max) {
+            return bounds[index].max;
         } else {
             return element;
         }
@@ -121,26 +127,34 @@ function DifferentialEvolution(pop_size, bounds, iterations, factor, criteria, t
     for (let i = 0; i < iterations; i++) {
         //iterate over all candidate solutions
         population.forEach((individual, j) => {
-            // for (let j = 0; j < pop_size; j++) {
+            messages.push(`Individual index: ${j}`);
             //refresh the temp population to not throw out all the element out of the population with splice
             let temp_population = [...population];
             temp_population.splice(j, 1);
             //choose 3 random individuals from the population that are not the current one
             const candidates = ChooseRandom(temp_population, 3);
+            messages.push(`3 random candidates chosen from population: ([${candidates.map(el => el.map(i => i.toFixed(5))).join('], [')}])`);
             //perform mutation
             let mutated    = Mutate(candidates, factor);
+            messages.push(`Mutated vector made by combining 3 candidates: [${mutated.map(el => el.toFixed(5)).join(', ')}]`);
             //check that lower and upper bounds are retained after mutation
-            mutated        = CheckBounds(mutated, factor);
+            mutated        = CheckBounds(mutated, bounds);
+            messages.push(`Mutated vector after replacing values out of bounds: [${mutated.map(el => el.toFixed(5)).join(', ')}]`);
             //perform crossover
             let trail      = Crossover(mutated, individual, bounds.length, criteria);
+            messages.push(`Trail vector made by crossing over muted and current individual: [${trail.map(el => el.toFixed(5)).join(', ')}]`);
             //compute objective function value for target vector
             let obj_target = ObjectiveFunction(individual);
+            messages.push(`Determined objective value of current individual: ${obj_target.toFixed(5)}`);
             //compute objective function value for trial vector
             let obj_trial  = ObjectiveFunction(trail);
+            messages.push(`Determined objective value of the trail vector: ${obj_trial.toFixed(5)}`);
             //perform selection
             if (obj_trial < obj_target) {
                 population[j] = trail;
                 obj_all[j]    = obj_trial;
+                messages.push(`-`);
+                messages.push(`After selection current individual changed from: [${individual.map(el => el.toFixed(5)).join(', ')}] to [${trail.map(el => el.toFixed(5)).join(', ')}]`);
             }
         });
         best_obj = Math.min.apply(null, obj_all);
@@ -151,6 +165,7 @@ function DifferentialEvolution(pop_size, bounds, iterations, factor, criteria, t
         }
         //report progress at each iteration
         messages.push(`Iteration: ${i + 1} f([${best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${best_obj.toFixed(5)}`);
+        messages.push(`*******************************************`);
         if(test){
             console.log(`Iteration: ${i + 1} f([${best_vector.map(el => el.toFixed(5)).join(', ')}]) = ${best_obj.toFixed(5)}`);
         }

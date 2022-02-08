@@ -70,7 +70,8 @@
                 });
 
                 const evo_result = DifferentialEvolution(input.pop_size, input.bounds, input.iterations,input.factor, input.criteria);
-                const msg_html   = evo_result.messages.map(item => '<div class="row">' + item + '</div>').join('');
+                // const msg_html   = evo_result.messages.map(item => '<div class="row">' + item + '</div>').join('');
+                const msg_html   = '<table id="result-table" class="row">' + evo_result.messages.map(item => '<tr><td>' + item + '</td></tr>').join('') + '</table>';
                 $('#result').empty().append(msg_html);
                 // console.log(input)
             });
@@ -78,6 +79,30 @@
         });
     </script>
     <style>
+        #result-table {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            /*width: 100%;*/
+        }
+
+        #result-table td, #result-table th {
+            text-align: center;
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #result-table tr:nth-child(even){background-color: #f2f2f2;}
+
+        #result-table tr:hover {background-color: #ddd;}
+
+        #result-table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+
         input[type=text], input[type=number],select {
             width: 100%;
             padding: 8px 8px;
